@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import urllib.parse
 from datetime import datetime
 from io import BytesIO
 
@@ -262,14 +263,12 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
         nome_dia = f"Dia {dia_num}"
         treino[nome_dia] = {}
         
-        # Resgata grupos musculares do dia
         grupos_do_dia_atuais = grupos_por_dia.get(dia_num, [])
         if not grupos_do_dia_atuais and custom_split and str(dia_num) in custom_split:
             grupos_do_dia_atuais = custom_split[str(dia_num)]
 
         grupos_do_dia_normalizados = [g.split(" (")[0].strip() for g in grupos_do_dia_atuais]
         
-        # Resgata exercícios preenchidos manualmente pelo usuário
         ex_manuais_dia = custom_exercises.get(dia_num, []) if custom_exercises else []
         if not ex_manuais_dia and custom_exercises and str(dia_num) in custom_exercises:
             ex_manuais_dia = custom_exercises[str(dia_num)]
@@ -285,11 +284,9 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
             if grupo_muscular_normalizado not in EXERCICIOS:
                 continue
 
-            # Se o usuário escolheu exercícios exatos, usa eles!
             if foco_treino == "Personalizado (Montar meu próprio)" and grupo_muscular_normalizado in ex_manuais_por_grupo:
                 exercicios_selecionados = ex_manuais_por_grupo[grupo_muscular_normalizado]
             else:
-                # Senão, a IA escolhe aleatoriamente com base na experiência
                 exercicios_disponiveis = EXERCICIOS[grupo_muscular_normalizado].get(experiencia, EXERCICIOS[grupo_muscular_normalizado]["Básico"])
                 if not exercicios_disponiveis:
                     continue
@@ -310,7 +307,6 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
                     min(num_exercicios, len(exercicios_disponiveis)),
                 )
 
-            # Adiciona os exercícios ao dicionário do treino final
             for i_ex, exercicio in enumerate(exercicios_selecionados):
                 chave_exercicio = f"{grupo_muscular_original} - Ex. {i_ex+1}"
                 count_temp = 1
@@ -494,7 +490,6 @@ if "dieta_plano" not in st.session_state:
 # --- INTERFACE DO USUÁRIO ---
 st.title("💪 Treinador IA de Bodybuilding")
 
-# Painel Lateral dinâmico
 with st.sidebar:
     st.header("📋 Seus Dados")
     
@@ -516,7 +511,6 @@ with st.sidebar:
     
     dias_treino = st.slider("📅 Dias de treino por semana:", 1, 7, 4)
     
-    # Seção Dinâmica de Treino Personalizado
     custom_split = {}
     custom_exercises = {}
     
@@ -533,9 +527,7 @@ with st.sidebar:
                 if musculos_dia:
                     st.caption("Escolha os exercícios (ou deixe em branco para a IA gerar).")
                     for m in musculos_dia:
-                        # Extrai todos os exercícios disponíveis no banco para esse músculo
                         todos_ex = EXERCICIOS[m]["Básico"] + EXERCICIOS[m]["Intermediário"] + EXERCICIOS[m]["Avançado"]
-                        # Remove as duplicatas mantendo a ordem
                         todos_ex = list(dict.fromkeys(todos_ex)) 
                         
                         escolhidos = st.multiselect(f"Exercícios de {m}:", todos_ex, key=f"custom_ex_{d}_{m}")
@@ -549,10 +541,8 @@ with st.sidebar:
     dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
     
     st.write("---")
-    # Botão de Envio
     submitted = st.button("🚀 Gerar Plano Completo Agora!", use_container_width=True)
 
-# Lógica de processamento e geração atrelada ao clique do botão
 if submitted:
     with st.spinner("🧠 Analisando seus dados e montando o plano perfeito... Aguarde!"):
         st.session_state.user_data_dict = {
@@ -609,7 +599,11 @@ with tab_gerador:
                         st.write("Dia de descanso ou sem exercícios definidos.")
                     else:
                         for grupo_chave_ex, exercicio_desc in exercicios_dia.items():
-                            st.markdown(f"💪 **{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:** {exercicio_desc}")
+                            nome_exercicio = exercicio_desc.split(" (")[0]
+                            query = urllib.parse.quote(f"como executar {nome_exercicio} musculação")
+                            yt_link = f"https://www.youtube.com/results?search_query={query}"
+                            
+                            st.markdown(f"💪 **{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:** {exercicio_desc} | [🎥 Ver Vídeo no YouTube]({yt_link})")
         
         with tab_dieta:
             st.header("🥗 Seu Plano Alimentar Diário")
@@ -632,7 +626,6 @@ with tab_gerador:
                 key="download_pdf_button"
             )
 
-        # SEÇÃO PARA SALVAR O TREINO NO APLICATIVO
         st.markdown("---")
         st.subheader("💾 Salvar este Plano no Aplicativo")
         col_nome, col_btn = st.columns([3, 1])
@@ -675,25 +668,29 @@ with tab_salvos:
                 st.markdown(f"**Meta:** {usr['meta']} | **Foco:** {usr.get('foco_treino', 'Padrão')} | **Dias:** {usr['dias_treino']} | **Nível:** {usr['experiencia']}")
                 st.write("---")
                 
-                # Resumo Macros
-                st.markdown("**Macros Diários:**")
                 cm1, cm2, cm3, cm4 = st.columns(4)
                 cm1.metric("Calorias", f"{dados_plano['macros']['calorias']} kcal")
                 cm2.metric("Proteínas", f"{dados_plano['macros']['proteinas']} g")
                 cm3.metric("Carboidratos", f"{dados_plano['macros']['carboidratos']} g")
                 cm4.metric("Gorduras", f"{dados_plano['macros']['gorduras']} g")
                 
-                # Resumo Treino
                 st.write("---")
-                st.markdown("**Resumo do Treino Semanal:**")
+                st.markdown("**Detalhes do Treino Semanal:**")
                 for dia, exercicios in dados_plano['treino'].items():
                     if exercicios:
                         foco_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios.keys()))
-                        st.write(f"- **{dia}** ({foco_str}): {len(exercicios)} exercícios")
+                        st.markdown(f"**{dia}** ({foco_str})")
+                        for grupo_chave_ex, exercicio_desc in exercicios.items():
+                            nome_exercicio = exercicio_desc.split(" (")[0]
+                            query = urllib.parse.quote(f"como executar {nome_exercicio} musculação")
+                            yt_link = f"https://www.youtube.com/results?search_query={query}"
+                            
+                            st.markdown(f"- **{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:** {exercicio_desc} | [🎥 Ver Vídeo]({yt_link})")
+                        st.write("")
                     else:
-                        st.write(f"- **{dia}**: Descanso / OFF")
+                        st.markdown(f"**{dia}**: Descanso / OFF")
+                        st.write("")
                 
-                # Botão Excluir
                 st.write("---")
                 if st.button(f"🗑️ Excluir '{nome_plano}'", key=f"del_{nome_plano}"):
                     del treinos_salvos[nome_plano]
