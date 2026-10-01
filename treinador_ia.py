@@ -13,28 +13,23 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle
 
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(
-    page_title="Treinador IA - Modo Caveira",
+    page_title="Treinador IA - Modo Monstro",
     page_icon="💀",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# --- ESTILIZAÇÃO CSS CUSTOMIZADA (TEMA HARDCORE /CAVEIRA) ---
+# --- ESTILIZAÇÃO CSS CUSTOMIZADA (TEMA HARDCORE / MONSTRO) ---
 st.markdown("""
     <style>
-    /* Fundo Geral da Aplicação */
     .stApp {
         background-color: #0c0c0c;
         color: #e0e0e0;
     }
-    
-    /* Barra Lateral Estilizada */
     [data-testid="stSidebar"] {
         background-color: #141414;
         border-right: 1px solid #222222;
     }
-    
-    /* Botões Principais (Estilo Agressivo) */
     .stButton>button {
         background: linear-gradient(135deg, #b70909 0%, #e5383b 100%);
         color: white;
@@ -51,8 +46,6 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(229, 56, 59, 0.8);
         transform: translateY(-2px);
     }
-    
-    /* Botão de Download */
     [data-testid="stDownloadButton"]>button {
         background: linear-gradient(135deg, #132a13 0%, #31572c 100%);
         color: #ffffff;
@@ -64,8 +57,6 @@ st.markdown("""
         background: linear-gradient(135deg, #31572c 0%, #4f772d 100%);
         box-shadow: 0 0 12px rgba(79, 119, 45, 0.6);
     }
-    
-    /* Cards de Métricas EstiloCaveira */
     [data-testid="stMetric"] {
         background-color: #171717;
         border: 1px solid #282828;
@@ -85,8 +76,6 @@ st.markdown("""
         font-weight: 900;
         font-size: 1.6rem;
     }
-    
-    /* Abas Customizadas */
     .stTabs [data-baseweb="tab-list"] {
         gap: 10px;
         background-color: #0c0c0c;
@@ -106,8 +95,6 @@ st.markdown("""
         border-color: #e5383b !important;
         box-shadow: 0 -2px 10px rgba(229, 56, 59, 0.5);
     }
-    
-    /* Caixas de Expansão */
     .streamlit-expanderHeader {
         background-color: #171717 !important;
         border: 1px solid #282828;
@@ -569,8 +556,6 @@ def gerar_pdf(treino, dieta_plano, macros, user_data):
     buffer.close()
     return pdf
 
-
-# --- GERENCIAMENTO DE ESTADO (SESSION STATE) ---
 if "plano_gerado" not in st.session_state:
     st.session_state.plano_gerado = False
 if "user_data_dict" not in st.session_state:
@@ -584,8 +569,7 @@ if "split_info" not in st.session_state:
 if "dieta_plano" not in st.session_state:
     st.session_state.dieta_plano = {}
 
-# --- INTERFACE DO USUÁRIO ---
-st.title("💀 Treinador IA — Modo Caveira")
+st.title("💀 Treinador IA — Modo Monstro")
 
 with st.sidebar:
     st.header("📋 Dados do Atleta")
@@ -638,7 +622,7 @@ with st.sidebar:
     dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
     
     st.write("---")
-    submitted = st.button("🔥 GERAR PLANO CAVEIRA", use_container_width=True)
+    submitted = st.button("🔥 GERAR PLANO MONSTRO", use_container_width=True)
 
 if submitted:
     with st.spinner("💀 Processando protocolos e calculando carga... Aguarde!"):
@@ -654,11 +638,8 @@ if submitted:
         st.session_state.dieta_plano = gerar_dieta_completa(st.session_state.macros, dieta_selecionada_usuario, st.session_state.user_data_dict)
         st.session_state.plano_gerado = True
 
-
-# --- ESTRUTURA DE ABAS PRINCIPAIS ---
 tab_gerador, tab_salvos = st.tabs(["🚀 Gerador de Treino", "📁 Meus Planos Salvos"])
 
-# ABA 1: O GERADOR DE TREINO E RESULTADOS
 with tab_gerador:
     if st.session_state.plano_gerado:
         user_data_dict = st.session_state.user_data_dict
@@ -667,7 +648,7 @@ with tab_gerador:
         split_info = st.session_state.split_info
         dieta_plano = st.session_state.dieta_plano
 
-        st.success(f"💀 Protocolo Caveira para **{user_data_dict['nome']}** gerado com sucesso!")
+        st.success(f"💀 Protocolo Monstro para **{user_data_dict['nome']}** gerado com sucesso!")
         st.balloons()
 
         st.subheader("📊 Resumo dos Macros & Alvo")
@@ -748,10 +729,9 @@ with tab_gerador:
                     st.success(f"Protocolo '{nome_plano_input}' salvo com sucesso!")
 
     else:
-        st.info("👈 Preencha seus dados na barra lateral e clique em **GERAR PLANO CAVEIRA** para começar!")
+        st.info("👈 Preencha seus dados na barra lateral e clique em **GERAR PLANO MONSTRO** para começar!")
         st.markdown("### 💀 Eleve seus treinos ao próximo nível com Inteligência Artificial!")
 
-# ABA 2: OS TREINOS SALVOS LOCALMENTE
 with tab_salvos:
     st.header("📁 Protocolos Salvos")
     treinos_salvos = carregar_treinos_salvos()
@@ -772,7 +752,7 @@ with tab_salvos:
                 cm4.metric("Gorduras", f"{dados_plano['macros']['gorduras']} g")
                 
                 st.write("---")
-                st.markdown("**Detalhes da Ficha Salva:**")
+                st.markdown("**🏋️‍♂️ Detalhes do Treino Semanal:**")
                 for dia, exercicios in dados_plano['treino'].items():
                     if exercicios:
                         foco_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios.keys()))
@@ -787,6 +767,17 @@ with tab_salvos:
                     else:
                         st.markdown(f"**{dia}**: Descanso / OFF")
                         st.write("")
+                
+                # Plano Alimentar integrado como um segundo plano salvo
+                st.write("---")
+                st.markdown("**🥗 Plano Alimentar (Dieta) Salvo:**")
+                for refeicao, itens_refeicao in dados_plano.get('dieta', {}).items():
+                    with st.expander(f"🍽️ {refeicao.upper()}"):
+                        if not itens_refeicao or "Refeição opcional" in itens_refeicao[0]:
+                            st.write("Nenhuma sugestão específica ou refeição opcional.")
+                        else:
+                            for item_desc in itens_refeicao:
+                                st.markdown(f" • {item_desc}")
                 
                 st.write("---")
                 if st.button(f"🗑️ Excluir '{nome_plano}'", key=f"del_{nome_plano}"):
