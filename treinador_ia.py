@@ -314,7 +314,6 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
         split_escolhido = f"Híbrido ({dias_treino} dias: Full Body + Ênfase Pernas)"
         grupos_por_dia = {}
         for d in range(1, dias_treino + 1):
-            # Se tiver 5 dias ou mais, os primeiros dias são Full Body e os últimos são de ênfase (ex: Pernas)
             if dias_treino >= 5 and d == dias_treino:
                 grupos_por_dia[d] = ["Pernas", "Abdômen"]
             elif dias_treino >= 6 and d == dias_treino - 1:
@@ -760,19 +759,21 @@ with tab_salvos:
     else:
         for nome_plano, dados_plano in treinos_salvos.items():
             with st.expander(f"📌 {nome_plano} (Criado em: {dados_plano.get('data', 'Data desconhecida')})"):
-                usr = dados_plano['user_data']
-                st.markdown(f"**Meta:** {usr['meta']} | **Foco:** {usr.get('foco_treino', 'Padrão')} | **Dias:** {usr['dias_treino']} | **Nível:** {usr['experiencia']}")
+                usr = dados_plano.get('user_data', {})
+                st.markdown(f"**Meta:** {usr.get('meta', 'Geral')} | **Foco:** {usr.get('foco_treino', 'Padrão')} | **Dias:** {usr.get('dias_treino', 'N/A')} | **Nível:** {usr.get('experiencia', 'N/A')}")
                 st.write("---")
                 
+                macros = dados_plano.get('macros', {"calorias": 0, "proteinas": 0, "carboidratos": 0, "gorduras": 0})
                 cm1, cm2, cm3, cm4 = st.columns(4)
-                cm1.metric("Calorias", f"{dados_plano['macros']['calorias']} kcal")
-                cm2.metric("Proteínas", f"{dados_plano['macros']['proteinas']} g")
-                cm3.metric("Carboidratos", f"{dados_plano['macros']['carboidratos']} g")
-                cm4.metric("Gorduras", f"{dados_plano['macros']['gorduras']} g")
+                cm1.metric("Calorias", f"{macros.get('calorias', 0)} kcal")
+                cm2.metric("Proteínas", f"{macros.get('proteinas', 0)} g")
+                cm3.metric("Carboidratos", f"{macros.get('carboidratos', 0)} g")
+                cm4.metric("Gorduras", f"{macros.get('gorduras', 0)} g")
                 
                 st.write("---")
                 st.markdown("**🏋️‍♂️ Detalhes do Treino Semanal:**")
-                for dia, exercicios in dados_plano['treino'].items():
+                treino_dict = dados_plano.get('treino', {})
+                for dia, exercicios in treino_dict.items():
                     if exercicios:
                         foco_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios.keys()))
                         st.markdown(f"**{dia}** ({foco_str})")
@@ -789,8 +790,9 @@ with tab_salvos:
                 
                 st.write("---")
                 st.markdown("**🥗 Plano Alimentar (Dieta) Salvo:**")
-                for refeicao, itens_refeicao in dados_plano.get('dieta', {}).items():
-                    with st.expander(f"🍽️ {refeicao.upper()}"):
+                dieta_dict = dados_plano.get('dieta', {})
+                for refeicao, itens_refeicao in dieta_dict.items():
+                    with st.expander(f"🍽️ {refeicao.upper()} ->"):
                         if not itens_refeicao or "Refeição opcional" in itens_refeicao[0]:
                             st.write("Nenhuma sugestão específica ou refeição opcional.")
                         else:
