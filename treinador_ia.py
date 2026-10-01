@@ -19,88 +19,112 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- ESTILIZAÇÃO CSS CUSTOMIZADA (TEMA HARDCORE / MONSTRO) ---
+# --- ESTILIZAÇÃO CSS CUSTOMIZADA (PREMIUM HARDCORE) ---
 st.markdown("""
     <style>
+    /* Fundo geral escuro e elegante */
     .stApp {
-        background-color: #0c0c0c;
-        color: #e0e0e0;
+        background-color: #080808;
+        color: #d1d1d1;
     }
+    
+    /* Sidebar refinada */
     [data-testid="stSidebar"] {
-        background-color: #141414;
-        border-right: 1px solid #222222;
+        background-color: #0f0f0f;
+        border-right: 1px solid #260000;
     }
+    
+    /* Botões de Ação Principais */
     .stButton>button {
-        background: linear-gradient(135deg, #b70909 0%, #e5383b 100%);
+        background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%);
         color: white;
         font-weight: 800;
-        letter-spacing: 0.5px;
-        border: none;
-        border-radius: 6px;
-        padding: 0.6rem 1rem;
-        box-shadow: 0 4px 10px rgba(183, 9, 9, 0.4);
+        letter-spacing: 1px;
+        border: 1px solid #ff3333;
+        border-radius: 4px;
+        padding: 0.6rem 1.5rem;
+        box-shadow: 0 4px 15px rgba(220, 20, 60, 0.2);
         transition: all 0.3s ease;
+        text-transform: uppercase;
     }
     .stButton>button:hover {
-        background: linear-gradient(135deg, #e5383b 100%, #ff4d4d 0%);
-        box-shadow: 0 0 15px rgba(229, 56, 59, 0.8);
+        background: linear-gradient(135deg, #dc143c 0%, #ff3333 100%);
+        box-shadow: 0 0 20px rgba(220, 20, 60, 0.6);
         transform: translateY(-2px);
+        border-color: #ff6666;
     }
+    
+    /* Botão de Download PDF */
     [data-testid="stDownloadButton"]>button {
-        background: linear-gradient(135deg, #132a13 0%, #31572c 100%);
-        color: #ffffff;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        color: #ff4d4d;
         font-weight: 800;
-        border: 1px solid #4f772d;
-        border-radius: 6px;
+        border: 1px solid #4d0000;
+        border-radius: 4px;
     }
     [data-testid="stDownloadButton"]>button:hover {
-        background: linear-gradient(135deg, #31572c 0%, #4f772d 100%);
-        box-shadow: 0 0 12px rgba(79, 119, 45, 0.6);
+        background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+        border-color: #ff4d4d;
+        color: white;
     }
+    
+    /* Cartões de Métricas */
     [data-testid="stMetric"] {
-        background-color: #171717;
-        border: 1px solid #282828;
-        border-left: 4px solid #e5383b;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        background-color: #121212;
+        border: 1px solid #2a0000;
+        border-left: 4px solid #dc143c;
+        padding: 15px 20px;
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
     [data-testid="stMetricLabel"] {
-        color: #999999 !important;
-        font-weight: 700;
+        color: #888888 !important;
+        font-weight: 600;
         text-transform: uppercase;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
     }
     [data-testid="stMetricValue"] {
-        color: #ff4d4d !important;
+        color: #ffffff !important;
         font-weight: 900;
-        font-size: 1.6rem;
+        font-size: 1.8rem;
     }
+    
+    /* Abas (Tabs) */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 10px;
-        background-color: #0c0c0c;
+        gap: 15px;
+        background-color: transparent;
         padding-bottom: 5px;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: #171717;
-        border: 1px solid #282828;
-        border-radius: 6px 6px 0px 0px;
-        color: #b0b0b0;
+        background-color: transparent;
+        border: none;
+        border-bottom: 2px solid #333333;
+        color: #777777;
         font-weight: 700;
-        padding: 10px 24px;
+        padding: 12px 20px;
+        transition: all 0.2s;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #e5383b !important;
-        color: white !important;
-        border-color: #e5383b !important;
-        box-shadow: 0 -2px 10px rgba(229, 56, 59, 0.5);
+        background-color: transparent !important;
+        color: #dc143c !important;
+        border-bottom: 2px solid #dc143c !important;
     }
+    
+    /* Expanders */
     .streamlit-expanderHeader {
-        background-color: #171717 !important;
-        border: 1px solid #282828;
-        border-radius: 6px;
-        color: #ffffff !important;
-        font-weight: 700;
+        background-color: #121212 !important;
+        border: 1px solid #222222;
+        border-radius: 4px;
+        color: #dddddd !important;
+        font-weight: 600;
+    }
+    
+    /* Caixas de Alerta/Info */
+    .stAlert {
+        background-color: #121212;
+        border: 1px solid #2a2a2a;
+        color: #cccccc;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -166,31 +190,31 @@ EXERCICIOS = {
 
 ALIMENTOS = {
     "Proteínas": [
-        "Frango (peito grelhado/cozido) (100g)", "Peito de peru defumado (100g)", "Peixe branco (tilápia, linguado, merluza) (100g)", "Salmão grelhado/assado (100g)",
-        "Atum em água (lata 80g drenado)", "Carne vermelha magra (patinho, alcatra, maminha) (100g)", "Ovos inteiros cozidos (2 unidades grandes)",
-        "Clara de ovo pasteurizada (equivalente a 4 claras)", "Queijo cottage (100g)", "Iogurte grego natural desnatado (1 pote 100-150g)",
-        "Whey protein isolado/concentrado (1 dose/scoop)", "Camarão cozido (100g)", "Lentilha cozida (1 xícara ~180g)", "Grão de bico cozido (1 xícara ~160g)",
-        "Tofu firme (100g)", "Carne de porco magra (lombo assado/grelhado) (100g)", "Ricota fresca (50g)", "Proteína de soja texturizada hidratada (100g)"
+        "Frango (peito grelhado/cozido)", "Peito de peru defumado", "Peixe branco", "Salmão grelhado",
+        "Atum em água", "Carne vermelha magra", "Ovos inteiros",
+        "Clara de ovo", "Queijo cottage", "Iogurte grego natural",
+        "Whey protein", "Camarão cozido", "Lentilha cozida", "Grão de bico",
+        "Tofu firme", "Carne de porco magra", "Ricota fresca", "Proteína de soja"
     ],
     "Carboidratos": [
-        "Arroz integral cozido (1 xícara ~150g)", "Batata-doce cozida/assada (1 média ~150g)", "Quinoa cozida (1 xícara ~180g)",
-        "Aveia em flocos (4 colheres de sopa ~40g)", "Pão integral (100% integral) (2 fatias)", "Massa integral cozida (1 xícara ~140g)",
-        "Batata inglesa cozida/assada (1 média ~150g)", "Inhame cozido (1 médio ~150g)", "Mandioca (aipim/macaxeira) cozida (1 pedaço médio ~150g)",
-        "Frutas variadas (1 porção média)", "Banana prata/nanica (1 unidade média)", "Maçã (Gala, Fuji) (1 unidade média)",
-        "Mamão formosa (1 fatia média)", "Melancia (1 fatia grande)", "Pasta de amendoim integral sem açúcar (1 colher de sopa ~15g)",
-        "Cuscuz nordestino cozido (1/2 xícara ~100g)", "Milho verde cozido (1 espiga média)", "Tapioca (goma hidratada) (3 colheres de sopa)",
-        "Feijão (carioca, preto, fradinho) cozido (1 concha média ~100g)", "Arroz branco cozido (1 xícara ~150g)"
+        "Arroz integral", "Batata-doce", "Quinoa cozida",
+        "Aveia em flocos", "Pão integral", "Massa integral",
+        "Batata inglesa", "Inhame cozido", "Mandioca cozida",
+        "Frutas variadas", "Banana prata", "Maçã",
+        "Mamão formosa", "Melancia", "Pasta de amendoim integral",
+        "Cuscuz nordestino", "Milho verde", "Tapioca",
+        "Feijão", "Arroz branco"
     ],
     "Gorduras": [
-        "Abacate (1/2 unidade pequena)", "Castanha do Pará (2-3 unidades)", "Castanha de caju (10-15 unidades)", "Amêndoas (10-15 unidades)",
-        "Nozes (4-5 metades)", "Azeite de oliva extra virgem (1 colher de sopa ~10ml)", "Sementes de linhaça (1-2 colheres de sopa)",
-        "Sementes de chia (1-2 colheres de sopa)", "Gema de ovo (incluída nos ovos inteiros)", "Manteiga de amendoim/castanhas (1 colher de sopa)",
-        "Queijo amarelo (1 fatia grossa ~30g)", "Chocolate amargo (70% cacau ou mais) (2-3 quadradinhos ~20-30g)"
+        "Abacate", "Castanha do Pará", "Castanha de caju", "Amêndoas",
+        "Nozes", "Azeite de oliva extra virgem", "Sementes de linhaça",
+        "Sementes de chia", "Gema de ovo", "Manteiga de amendoim",
+        "Queijo amarelo", "Chocolate amargo (70%+)"
     ],
     "Vegetais": [
-        "Brócolis (1 xícara)", "Espinafre (1 xícara)", "Abóbora cabotiá/moranga (1 xícara)", "Couve-flor (1 xícara)", "Pepino (1 unidade média)",
-        "Tomate (1 unidade média)", "Alface (à vontade)", "Rúcula (à vontade)", "Cenoura (1 unidade média)", "Beterraba (1/2 unidade média)",
-        "Berinjela (1 xícara)", "Abobrinha (1 unidade média)", "Pimentão (1/2 unidade média)"
+        "Brócolis", "Espinafre", "Abóbora cabotiá", "Couve-flor", "Pepino",
+        "Tomate", "Alface", "Rúcula", "Cenoura", "Beterraba",
+        "Berinjela", "Abobrinha", "Pimentão"
     ],
 }
 
@@ -299,9 +323,12 @@ def calcular_macros(peso, altura, idade, genero, meta, experiencia, atividade, d
 def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_split=None, custom_exercises=None):
     treino = {}
     
+    # 1. Personalizado
     if foco_treino == "Personalizado (Montar meu próprio)":
         split_escolhido = f"Split Personalizado ({dias_treino} dias)"
         grupos_por_dia = custom_split or {}
+        
+    # 2. Full Body Superior
     elif foco_treino == "Full Body Superior (Apenas Superiores)":
         split_escolhido = f"Full Body Superior ({dias_treino} dias)"
         grupos_por_dia = {}
@@ -310,6 +337,21 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
                 grupos_por_dia[d] = ["Peito", "Costas", "Ombros", "Bíceps", "Tríceps"]
             else:
                 grupos_por_dia[d] = ["Costas", "Peito", "Ombros", "Tríceps", "Bíceps"]
+
+    # 3. NOVO: Híbrido (Fullbody + Foco Personalizado)
+    elif foco_treino == "Híbrido (Fullbody + Personalizado)":
+        split_escolhido = f"Híbrido Fullbody/Foco ({dias_treino} dias)"
+        grupos_por_dia = {}
+        grupos_fullbody = ["Peito", "Costas", "Pernas", "Ombros", "Bíceps", "Tríceps"]
+        
+        for d in range(1, dias_treino + 1):
+            # Se o usuário escolheu algo para o dia D, aplicamos. Senão, vai Fullbody.
+            if custom_split and str(d) in custom_split and len(custom_split[str(d)]) > 0:
+                grupos_por_dia[d] = custom_split[str(d)]
+            else:
+                grupos_por_dia[d] = grupos_fullbody
+                
+    # 4. Padrão IA
     else:
         if dias_treino == 1:
             split_escolhido = "Full Body A"
@@ -341,8 +383,9 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
             grupos_por_dia = {1: ["Peito", "Ombros", "Tríceps"], 2: ["Costas", "Bíceps"], 3: ["Pernas", "Abdômen"], 4: ["Peito", "Ombros", "Tríceps"], 5: ["Costas", "Bíceps"], 6: ["Pernas"]}
         else:
             split_escolhido = "Alta Frequência/Ênfase (Avançado)"
-            grupos_por_dia = {1: ["Peito", "Tríceps"], 2: ["Costas", "Bíceps"], 3: ["Pernas (Quadríceps)"], 4: ["Ombros", "Abdômen"], 5: ["Peito (Superior/Deload)"], 6: ["Costas (Largura/Deload)"], 7: ["Pernas (Posterior/Glúteos)", "Bíceps", "Tríceps"]}
+            grupos_por_dia = {1: ["Peito", "Tríceps"], 2: ["Costas", "Bíceps"], 3: ["Pernas"], 4: ["Ombros", "Abdômen"], 5: ["Peito"], 6: ["Costas"], 7: ["Pernas", "Bíceps", "Tríceps"]}
 
+    # Geração dos Exercícios baseados no mapa
     for dia_num in range(1, dias_treino + 1):
         nome_dia = f"Dia {dia_num}"
         treino[nome_dia] = {}
@@ -375,9 +418,10 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
                 if not exercicios_disponiveis:
                     continue
 
+                # Distribuição Inteligente de Volume
                 num_exercicios = 2
                 if len(grupos_do_dia_normalizados) == 1:
-                    num_exercicios = random.randint(3, 4) if experiencia != "Avançado" else random.randint(4, 5)
+                    num_exercicios = random.randint(4, 5) if experiencia == "Avançado" else random.randint(3, 4)
                 elif len(grupos_do_dia_normalizados) == 2:
                     num_exercicios = random.randint(2, 3) if experiencia != "Avançado" else 3
                 elif len(grupos_do_dia_normalizados) >= 3:
@@ -403,7 +447,7 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
     return treino, split_escolhido
 
 @st.cache_data
-def gerar_dieta_completa(macros, dieta_tipo_selecionado, user_data):
+def gerar_dieta_completa(macros, dieta_tipo_selecionado, meta):
     refeicoes_plano = {
         "Café da manhã": [], "Lanche da manhã": [], "Almoço": [],
         "Lanche da tarde": [], "Jantar": [], "Ceia": [],
@@ -412,12 +456,12 @@ def gerar_dieta_completa(macros, dieta_tipo_selecionado, user_data):
         "Café da manhã": 0.20, "Lanche da manhã": 0.10, "Almoço": 0.30,
         "Lanche da tarde": 0.15, "Jantar": 0.20, "Ceia": 0.05,
     }
-    if user_data["meta"] == "Emagrecimento" or dieta_tipo_selecionado == "Emagrecimento (Hipocalórica)":
+    if meta == "Emagrecimento" or dieta_tipo_selecionado == "Emagrecimento (Hipocalórica)":
         perc_cal_refeicao["Ceia"] = 0.00
         perc_cal_refeicao["Lanche da manhã"] = 0.05
         perc_cal_refeicao["Lanche da tarde"] = 0.10
         perc_cal_refeicao["Almoço"] = 0.35
-    elif user_data["meta"] == "Crescimento" or dieta_tipo_selecionado == "Crescimento (Hipercalórica)":
+    elif meta == "Crescimento" or dieta_tipo_selecionado == "Crescimento (Hipercalórica)":
         perc_cal_refeicao["Lanche da manhã"] = 0.15
         perc_cal_refeicao["Lanche da tarde"] = 0.15
         perc_cal_refeicao["Ceia"] = 0.10
@@ -427,9 +471,9 @@ def gerar_dieta_completa(macros, dieta_tipo_selecionado, user_data):
         dist_macros_ref = {"P": 0.20, "C": 0.05, "F": 0.75}
     elif dieta_tipo_selecionado == "Low Carb":
         dist_macros_ref = {"P": 0.30, "C": 0.20, "F": 0.50}
-    elif user_data["meta"] == "Crescimento" or dieta_tipo_selecionado == "Crescimento (Hipercalórica)":
+    elif meta == "Crescimento" or dieta_tipo_selecionado == "Crescimento (Hipercalórica)":
         dist_macros_ref = {"P": 0.30, "C": 0.50, "F": 0.20}
-    elif user_data["meta"] == "Emagrecimento" or dieta_tipo_selecionado == "Emagrecimento (Hipocalórica)":
+    elif meta == "Emagrecimento" or dieta_tipo_selecionado == "Emagrecimento (Hipocalórica)":
         dist_macros_ref = {"P": 0.35, "C": 0.30, "F": 0.35}
 
     for refeicao, perc_cal_total_ref in perc_cal_refeicao.items():
@@ -445,35 +489,31 @@ def gerar_dieta_completa(macros, dieta_tipo_selecionado, user_data):
 
         if g_p_ref > 5 and ALIMENTOS["Proteínas"]:
             op_p = random.sample(ALIMENTOS["Proteínas"], min(2, len(ALIMENTOS["Proteínas"])))
-            sugestoes_itens.append(f"{int(g_p_ref)}g Proteína (ex: {op_p[0]} ou {op_p[1]})")
+            sugestoes_itens.append(f"{int(g_p_ref)}g Proteína (ex: {op_p[0]})")
         
         if g_c_ref > 5 and ALIMENTOS["Carboidratos"]:
             valid_carbs = ALIMENTOS["Carboidratos"]
             if dieta_tipo_selecionado == "Cetogênica":
-                valid_carbs = [a for a in ALIMENTOS["Gorduras"] if "castanha" in a or "semente" in a or "abacate" in a or "coco" in a] + \
-                              [v for v in ALIMENTOS["Vegetais"] if any(k in v for k in ["folhas", "brócolis", "couve-flor", "abobrinha", "pepino"])]
+                valid_carbs = [a for a in ALIMENTOS["Gorduras"] if "castanha" in a or "semente" in a or "abacate" in a] + \
+                              [v for v in ALIMENTOS["Vegetais"] if any(k in v for k in ["folhas", "brócolis", "couve-flor"])]
             if not valid_carbs:
                 valid_carbs = ["Vegetais de baixo amido"]
-            op_c = random.sample(valid_carbs, min(2, len(valid_carbs))) if valid_carbs else []
+            op_c = random.sample(valid_carbs, min(1, len(valid_carbs))) if valid_carbs else []
             if op_c:
-                sugestoes_itens.append(f"{int(g_c_ref)}g Carboidratos (ex: {op_c[0]}{f' ou {op_c[1]}' if len(op_c)>1 else ''})")
+                sugestoes_itens.append(f"{int(g_c_ref)}g Carbo (ex: {op_c[0]})")
         
         if g_f_ref > 3 and ALIMENTOS["Gorduras"]:
-            op_f = random.sample(ALIMENTOS["Gorduras"], min(2, len(ALIMENTOS["Gorduras"])))
-            sugestoes_itens.append(f"{int(g_f_ref)}g Gorduras (ex: {op_f[0]} ou {op_f[1]})")
+            op_f = random.sample(ALIMENTOS["Gorduras"], min(1, len(ALIMENTOS["Gorduras"])))
+            sugestoes_itens.append(f"{int(g_f_ref)}g Gordura (ex: {op_f[0]})")
             
         if refeicao in ["Almoço", "Jantar"] and ALIMENTOS["Vegetais"]:
             op_v = random.sample(ALIMENTOS["Vegetais"], min(2, len(ALIMENTOS["Vegetais"])))
-            sugestoes_itens.append(f"Vegetais (ex: {op_v[0]}, {op_v[1]} - à vontade ou porções indicadas)")
+            sugestoes_itens.append(f"Vegetais à vontade (ex: {op_v[0]}, {op_v[1]})")
 
         if sugestoes_itens:
-            refeicoes_plano[refeicao].append(f"~{int(cal_ref)} kcal: " + "; ".join(sugestoes_itens))
+            refeicoes_plano[refeicao].append(f"~{int(cal_ref)} kcal: " + " + ".join(sugestoes_itens))
         else:
-            refeicoes_plano[refeicao].append(f"~{int(cal_ref)} kcal: Ajustar com base nos macros ou refeição leve.")
-
-    if user_data["dias_treino"] > 0:
-        refeicoes_plano["Lanche da tarde"].append(f"<i>Sugestão Pré-Treino:</i> {random.choice(ALIMENTOS['Carboidratos'])} + {random.choice(ALIMENTOS['Proteínas'])}")
-        refeicoes_plano["Jantar"].append(f"<i>Sugestão Pós-Treino:</i> Refeição completa com {random.choice(ALIMENTOS['Proteínas'])} e {random.choice(ALIMENTOS['Carboidratos'])}")
+            refeicoes_plano[refeicao].append(f"~{int(cal_ref)} kcal: Ajustar com base nos macros.")
 
     return refeicoes_plano
 
@@ -483,304 +523,241 @@ def gerar_pdf(treino, dieta_plano, macros, user_data):
     width, height = A4
 
     styles = getSampleStyleSheet()
-    title_style = ParagraphStyle("TitleStyle", parent=styles["Title"], fontSize=18, alignment=1, spaceAfter=20, leading=22)
-    heading_style = ParagraphStyle("HeadingStyle", parent=styles["h2"], fontSize=14, spaceAfter=10, spaceBefore=12, leading=18)
+    title_style = ParagraphStyle("TitleStyle", parent=styles["Title"], fontSize=18, alignment=1, spaceAfter=20)
+    heading_style = ParagraphStyle("HeadingStyle", parent=styles["h2"], fontSize=14, spaceAfter=10, spaceBefore=12)
     body_style = ParagraphStyle("BodyStyle", parent=styles["Normal"], fontSize=10, leading=14, spaceAfter=6)
-    user_info_style = ParagraphStyle("UserInfoStyle", parent=styles["Normal"], fontSize=9, leading=12, spaceAfter=10)
-    table_header_style = ParagraphStyle("TableHeaderStyle", parent=styles["Normal"], fontSize=10, fontName="Helvetica-Bold", alignment=0)
-    table_cell_style = ParagraphStyle("TableCellStyle", parent=styles["Normal"], fontSize=10, alignment=0)
-
+    
     story = []
-    story.append(Paragraph("<b>PLANO COMPLETO DE TREINO E DIETA</b>", title_style))
+    story.append(Paragraph("<b>PLANO DE TREINO E DIETA - MODO MONSTRO</b>", title_style))
 
     user_info_text = f"""
         <b>Nome:</b> {user_data.get('nome', 'N/A')}<br/>
-        <b>Idade:</b> {user_data['idade']} anos | <b>Altura:</b> {user_data['altura']} cm | <b>Peso:</b> {user_data['peso']} kg<br/>
-        <b>Gênero:</b> {user_data['genero']} | <b>Nível:</b> {user_data['experiencia']} | <b>Meta:</b> {user_data['meta']}<br/>
-        <b>Foco:</b> {user_data.get('foco_treino', 'Padrão')} | <b>Dias de Treino:</b> {user_data['dias_treino']}/semana <br/>
-        <b>Dieta:</b> {user_data['dieta_selecionada']}<br/>
-        <b>Data da Geração:</b> {datetime.now().strftime('%d/%m/%Y')}
+        <b>Físico:</b> {user_data['peso']} kg | {user_data['altura']} cm | {user_data['idade']} anos<br/>
+        <b>Meta:</b> {user_data['meta']} | <b>Nível:</b> {user_data['experiencia']}<br/>
+        <b>Foco:</b> {user_data.get('foco_treino', 'Padrão')} ({user_data['dias_treino']} dias/sem)<br/>
+        <b>Dieta:</b> {user_data['dieta_selecionada']}
     """
-    story.append(Paragraph(user_info_text, user_info_style))
-
-    story.append(Paragraph("<b>MACROS DIÁRIOS ESTIMADOS</b>", heading_style))
-    macros_data_pdf = [
-        [Paragraph("<b>Nutriente</b>", table_header_style), Paragraph("<b>Quantidade</b>", table_header_style)],
-        [Paragraph("Calorias:", table_cell_style), Paragraph(f"{macros['calorias']} kcal", table_cell_style)],
-        [Paragraph("Proteínas:", table_cell_style), Paragraph(f"{macros['proteinas']} g", table_cell_style)],
-        [Paragraph("Carboidratos:", table_cell_style), Paragraph(f"{macros['carboidratos']} g", table_cell_style)],
-        [Paragraph("Gorduras:", table_cell_style), Paragraph(f"{macros['gorduras']} g", table_cell_style)],
-    ]
-    macros_table = Table(macros_data_pdf, colWidths=[width * 0.3, width * 0.5])
-    macros_table.setStyle(TableStyle([
-        ("GRID", (0, 0), (-1, -1), 0.5, (0, 0, 0)),
-        ("BACKGROUND", (0, 0), (-1, 0), (0.8, 0.8, 0.8)),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 8),
-    ]))
-    story.append(macros_table)
+    story.append(Paragraph(user_info_text, body_style))
     story.append(Paragraph("<br/>", body_style))
 
-    story.append(Paragraph("<b>PLANO DE TREINO SEMANAL</b>", heading_style))
+    # Tabela Macros
+    story.append(Paragraph("<b>MACROS DIÁRIOS</b>", heading_style))
+    macros_data = [
+        ["Calorias", f"{macros['calorias']} kcal"],
+        ["Proteínas", f"{macros['proteinas']} g"],
+        ["Carboidratos", f"{macros['carboidratos']} g"],
+        ["Gorduras", f"{macros['gorduras']} g"]
+    ]
+    t_macros = Table(macros_data, colWidths=[width*0.3, width*0.4])
+    t_macros.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, (0, 0, 0)),
+        ("BACKGROUND", (0, 0), (0, -1), (0.9, 0.9, 0.9)),
+        ("PADDING", (0, 0), (-1, -1), 6),
+    ]))
+    story.append(t_macros)
+    story.append(Paragraph("<br/>", body_style))
+
+    # Treino
+    story.append(Paragraph("<b>PROTOCOLOS DE TREINO</b>", heading_style))
     for dia, exercicios in treino.items():
-        story.append(Paragraph(f"<b>{dia.upper()}</b>", ParagraphStyle("DiaTreino", parent=body_style, fontName="Helvetica-Bold", spaceBefore=6)))
+        story.append(Paragraph(f"<b>{dia.upper()}</b>", ParagraphStyle("Dia", parent=body_style, fontName="Helvetica-Bold")))
         if not exercicios:
-            story.append(Paragraph("• Descanso ou dia livre.", body_style))
-        else:
-            for grupo_chave_ex, exercicio_desc in exercicios.items():
-                story.append(Paragraph(f"• <b>{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:</b> {exercicio_desc}", body_style))
+            story.append(Paragraph("• Descanso ativo ou off.", body_style))
+        for grupo, ex in exercicios.items():
+            grupo_clean = grupo.split(" - ")[0]
+            story.append(Paragraph(f"• <b>[{grupo_clean}]</b> {ex}", body_style))
         story.append(Paragraph("<br/>", body_style))
 
-    story.append(Paragraph("<b>PLANO ALIMENTAR DIÁRIO (SUGESTÕES)</b>", heading_style))
-    for refeicao, itens in dieta_plano.items():
-        story.append(Paragraph(f"<b>{refeicao.upper()}</b>", ParagraphStyle("RefeicaoTitulo", parent=body_style, fontName="Helvetica-Bold", spaceBefore=6)))
-        if not itens or "Refeição opcional" in itens[0]:
-            story.append(Paragraph("• Nenhuma sugestão específica ou refeição opcional.", body_style))
-        else:
-            for item_desc in itens:
-                item_desc_plain = item_desc.replace("<b>", "").replace("</b>", "").replace("<i>", "").replace("</i>", "").replace("<small>", "").replace("</small>", "")
-                story.append(Paragraph(f"• {item_desc_plain}", body_style))
+    # Dieta
+    story.append(Paragraph("<b>PLANO ALIMENTAR</b>", heading_style))
+    for ref, itens in dieta_plano.items():
+        story.append(Paragraph(f"<b>{ref.upper()}</b>", ParagraphStyle("Ref", parent=body_style, fontName="Helvetica-Bold")))
+        for item in itens:
+            story.append(Paragraph(f"• {item}", body_style))
         story.append(Paragraph("<br/>", body_style))
 
-    def draw_page_number(canvas, doc):
-        canvas.saveState()
-        canvas.setFont("Helvetica", 8)
-        canvas.drawRightString(width - 30, 30, f"Página {doc.page}")
-        canvas.restoreState()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    doc.build(story)
+    
+    buffer.seek(0)
+    return buffer
 
-    doc = SimpleDocTemplate(buffer, pagesize=A4, topMargin=30, bottomMargin=50, leftMargin=50, rightMargin=50)
-    doc.build(story, onFirstPage=draw_page_number, onLaterPages=draw_page_number)
-
-    pdf = buffer.getvalue()
-    buffer.close()
-    return pdf
-
-if "plano_gerado" not in st.session_state:
-    st.session_state.plano_gerado = False
-if "user_data_dict" not in st.session_state:
-    st.session_state.user_data_dict = {}
-if "macros" not in st.session_state:
-    st.session_state.macros = {}
-if "treino" not in st.session_state:
-    st.session_state.treino = {}
-if "split_info" not in st.session_state:
-    st.session_state.split_info = ""
-if "dieta_plano" not in st.session_state:
-    st.session_state.dieta_plano = {}
-
-st.title("💀 Treinador IA — Modo Monstro")
-
-with st.sidebar:
-    st.header("📋 Dados do Atleta")
-    
-    nome = st.text_input("Nome:", placeholder="Ex: Mestre Tephinho")
-    genero = st.radio("Gênero:", ["Masculino", "Feminino"], index=0, horizontal=True)
-    peso = st.number_input("Peso (kg):", min_value=30.0, max_value=250.0, value=70.0, step=0.5)
-    altura = st.number_input("Altura (cm):", min_value=100.0, max_value=250.0, value=175.0, step=0.5)
-    idade = st.number_input("Idade:", min_value=14, max_value=99, value=25, step=1)
-    
-    st.write("---")
-    meta = st.selectbox("🎯 Meta Principal:", META_OPCOES, index=0)
-    experiencia = st.selectbox("🏋️ Nível de Experiência:", EXPERIENCIA_OPCOES, index=1)
-    
-    foco_treino = st.selectbox(
-        "🎯 Foco do Treino:", 
-        ["Padrão (Equilibrado)", "Full Body Superior (Apenas Superiores)", "Personalizado (Montar meu próprio)"], 
-        index=0
-    )
-    
-    dias_treino = st.slider("📅 Dias de treino por semana:", 1, 7, 4)
-    
-    custom_split = {}
-    custom_exercises = {}
-    
-    if foco_treino == "Personalizado (Montar meu próprio)":
-        st.markdown("#### 🛠️ Monte seu Microciclo:")
-        opcoes_musculos = ["Peito", "Costas", "Pernas", "Ombros", "Tríceps", "Bíceps", "Abdômen"]
+# --- MAIN APP LAYOUT ---
+def main():
+    # SIDEBAR: Perfil do Usuário
+    with st.sidebar:
+        st.header("👤 Perfil do Atleta")
+        nome = st.text_input("Nome/Apelido", placeholder="Ex: Cbum")
         
-        for d in range(1, dias_treino + 1):
-            with st.expander(f"📅 Configurar Dia {d}", expanded=False):
-                musculos_dia = st.multiselect(f"Músculos (Dia {d}):", opcoes_musculos, key=f"custom_day_{d}")
-                custom_split[d] = musculos_dia
-                
-                exercicios_do_dia = []
-                if musculos_dia:
-                    st.caption("Escolha os exercícios (ou deixe em branco para a IA gerar).")
-                    for m in musculos_dia:
-                        todos_ex = EXERCICIOS[m]["Básico"] + EXERCICIOS[m]["Intermediário"] + EXERCICIOS[m]["Avançado"]
-                        todos_ex = list(dict.fromkeys(todos_ex)) 
-                        
-                        escolhidos = st.multiselect(f"Exercícios de {m}:", todos_ex, key=f"custom_ex_{d}_{m}")
-                        if escolhidos:
-                            exercicios_do_dia.extend([(m, ex) for ex in escolhidos])
-                
-                custom_exercises[d] = exercicios_do_dia
+        col_side1, col_side2 = st.columns(2)
+        with col_side1:
+            peso = st.number_input("Peso (kg)", min_value=30.0, max_value=200.0, value=75.0, step=0.5)
+            idade = st.number_input("Idade", min_value=12, max_value=100, value=25)
+        with col_side2:
+            altura = st.number_input("Altura (cm)", min_value=100, max_value=250, value=175)
+            genero = st.selectbox("Gênero", ["Masculino", "Feminino"])
 
-    st.write("---")
-    atividade = st.selectbox("🚶 Nível de Atividade Diária:", list(NIVEIS_ATIVIDADE_MULTIPLICADORES.keys()), index=2)
-    dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
-    
-    st.write("---")
-    submitted = st.button("🔥 GERAR PLANO MONSTRO", use_container_width=True)
+        atividade = st.selectbox("Nível de Atividade (Dia a Dia)", list(NIVEIS_ATIVIDADE_MULTIPLICADORES.keys()))
+        
+        st.markdown("---")
+        st.caption("Sistema de Periodização Modo Monstro v2.0")
 
-if submitted:
-    with st.spinner("💀 Processando protocolos e calculando carga... Aguarde!"):
-        st.session_state.user_data_dict = {
-            "nome": nome if nome else "Atleta",
-            "genero": genero, "peso": float(peso), "altura": float(altura), "idade": int(idade),
-            "meta": meta, "experiencia": experiencia, "foco_treino": foco_treino, 
-            "custom_split": custom_split, "custom_exercises": custom_exercises,
-            "atividade": atividade, "dias_treino": int(dias_treino), "dieta_selecionada": dieta_selecionada_usuario,
-        }
-        st.session_state.macros = calcular_macros(float(peso), float(altura), int(idade), genero, meta, experiencia, atividade, dieta_selecionada_usuario)
-        st.session_state.treino, st.session_state.split_info = gerar_treino_completo(int(dias_treino), experiencia, meta, foco_treino, custom_split, custom_exercises)
-        st.session_state.dieta_plano = gerar_dieta_completa(st.session_state.macros, dieta_selecionada_usuario, st.session_state.user_data_dict)
-        st.session_state.plano_gerado = True
+    # MAIN AREA
+    st.title("💀 Treinador IA - Modo Monstro")
+    st.markdown("Gere protocolos de treino e dietas baseados em ciência e hipertrofia.")
 
-tab_gerador, tab_salvos = st.tabs(["🚀 Gerador de Treino", "📁 Meus Planos Salvos"])
+    # ABAS (Tabs) para manter o visual limpo
+    tab_config, tab_plano, tab_hist = st.tabs(["⚙️ Configurar Protocolo", "🔥 Seu Plano", "📁 Arsenal (Salvos)"])
 
-with tab_gerador:
-    if st.session_state.plano_gerado:
-        user_data_dict = st.session_state.user_data_dict
-        macros = st.session_state.macros
-        treino = st.session_state.treino
-        split_info = st.session_state.split_info
-        dieta_plano = st.session_state.dieta_plano
-
-        st.success(f"💀 Protocolo Monstro para **{user_data_dict['nome']}** gerado com sucesso!")
-        st.balloons()
-
-        st.subheader("📊 Resumo dos Macros & Alvo")
-        col1, col2, col3 = st.columns(3)
+    with tab_config:
+        col1, col2 = st.columns(2)
+        
         with col1:
-            st.metric("🔥 Calorias Diárias", f"{macros['calorias']} kcal")
-            st.metric("🥩 Proteínas", f"{macros['proteinas']} g")
+            st.subheader("Objetivos")
+            meta = st.selectbox("Qual a sua meta principal?", META_OPCOES)
+            experiencia = st.selectbox("Nível de Experiência no Treino", EXPERIENCIA_OPCOES)
+            dieta = st.selectbox("Estratégia Nutricional", DIETA_OPCOES)
+
         with col2:
-            st.metric("🍚 Carboidratos", f"{macros['carboidratos']} g")
-            st.metric("🥑 Gorduras", f"{macros['gorduras']} g")
-        with col3:
-            st.metric("🗓️ Dias de Treino", f"{user_data_dict['dias_treino']} / semana")
-            st.metric("🏆 Experiência", user_data_dict['experiencia'])
-
-        st.markdown(f"**🎯 Meta:** {user_data_dict['meta']} | **Foco:** {user_data_dict['foco_treino']} | **🥗 Dieta:** {user_data_dict['dieta_selecionada']}")
-        st.markdown(f"**🏋️‍♂️ Split:** {split_info} | **🚶 Atividade:** {user_data_dict['atividade']}")
-
-        tab_treino, tab_dieta, tab_download = st.tabs(["🏋️ Plano de Treino Detalhado", "🍽️ Plano Alimentar Sugerido", "📥 Download do Plano"])
-
-        with tab_treino:
-            st.header("📅 Seu Plano de Treino Semanal")
-            for dia, exercicios_dia in treino.items():
-                foco_dia_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios_dia.keys())) if exercicios_dia else "Descanso / OFF"
-                with st.expander(f"**{dia.upper()}** — Foco: {foco_dia_str}"):
-                    if not exercicios_dia:
-                        st.write("Dia de descanso ou recuperação.")
-                    else:
-                        for grupo_chave_ex, exercicio_desc in exercicios_dia.items():
-                            nome_exercicio = exercicio_desc.split(" (")[0]
-                            query = urllib.parse.quote(f"como executar {nome_exercicio} musculação")
-                            yt_link = f"https://www.youtube.com/results?search_query={query}"
-                            
-                            st.markdown(f"💪 **{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:** {exercicio_desc} | [🎥 Ver Vídeo no YouTube]({yt_link})")
-        
-        with tab_dieta:
-            st.header("🥗 Plano Alimentar e Suplementação")
-            for refeicao, itens_refeicao in dieta_plano.items():
-                with st.expander(f"**{refeicao.upper()}**"):
-                    if not itens_refeicao or "Refeição opcional" in itens_refeicao[0]:
-                        st.write("Nenhuma sugestão específica ou refeição opcional.")
-                    else:
-                        for item_desc in itens_refeicao:
-                            st.markdown(f" • {item_desc}")
-        
-        with tab_download:
-            st.header("📥 Baixar Ficha em PDF")
-            pdf_bytes = gerar_pdf(treino, dieta_plano, macros, user_data_dict)
-            st.download_button(
-                label="⬇️ Baixar Protocolo em PDF",
-                data=pdf_bytes,
-                file_name=f"protocolo_monstro_{user_data_dict['nome'].replace(' ', '_').lower()}.pdf",
-                mime="application/pdf",
-                key="download_pdf_button"
+            st.subheader("Frequência & Divisão")
+            dias_treino = st.number_input("Dias de treino na semana", min_value=1, max_value=7, value=5)
+            foco_treino = st.selectbox(
+                "Estrutura do Treino", 
+                [
+                    "Padrão (IA decide a melhor divisão)", 
+                    "Full Body Superior (Apenas Superiores)", 
+                    "Híbrido (Fullbody + Personalizado)",
+                    "Personalizado (Montar meu próprio)"
+                ]
             )
 
-        st.markdown("---")
-        st.subheader("💾 Salvar Ficha no Aplicativo")
-        col_nome, col_btn = st.columns([3, 1])
-        with col_nome:
-            nome_plano_input = st.text_input("Nome da Ficha (ex: Push Pull Legs - Fase 1):", key="nome_plano_input")
-        with col_btn:
-            st.write("") 
-            st.write("")
-            if st.button("💾 Salvar Protocolo"):
-                if nome_plano_input.strip() == "":
-                    st.warning("Insira um nome para o plano antes de salvar.")
-                else:
-                    treinos_bd = carregar_treinos_salvos()
-                    treinos_bd[nome_plano_input] = {
-                        "data": datetime.now().strftime('%d/%m/%Y às %H:%M'),
-                        "user_data": st.session_state.user_data_dict,
-                        "macros": st.session_state.macros,
-                        "treino": st.session_state.treino,
-                        "split": st.session_state.split_info,
-                        "dieta": st.session_state.dieta_plano
-                    }
-                    salvar_treinos_arquivo(treinos_bd)
-                    st.success(f"Protocolo '{nome_plano_input}' salvo com sucesso!")
+        custom_split = {}
+        
+        # INTERFACE DA NOVA LÓGICA HÍBRIDA
+        if foco_treino in ["Híbrido (Fullbody + Personalizado)", "Personalizado (Montar meu próprio)"]:
+            st.markdown("---")
+            st.markdown(f"### 🧬 Setup {foco_treino.split(' ')[0]}")
+            
+            if "Híbrido" in foco_treino:
+                st.info("💡 **Dica:** Deixe o dia vazio para gerar um treino **Fullbody**. Se quiser focar em algo (ex: Pernas), selecione o músculo.")
+            else:
+                st.info("💡 Escolha exatamente os músculos que quer treinar em cada dia.")
+            
+            lista_musculos = list(EXERCICIOS.keys())
+            
+            # Gerando os selects em um grid elegante (até 4 por linha)
+            cols_dias = st.columns(min(dias_treino, 4))
+            for i in range(1, dias_treino + 1):
+                col_idx = (i - 1) % len(cols_dias)
+                with cols_dias[col_idx]:
+                    selecao = st.multiselect(
+                        f"Dia {i}", 
+                        options=lista_musculos,
+                        placeholder="Fullbody" if "Híbrido" in foco_treino else "Selecione...",
+                        key=f"split_dia_{i}"
+                    )
+                    if selecao:
+                        custom_split[str(i)] = selecao
 
-    else:
-        st.info("👈 Preencha seus dados na barra lateral e clique em **GERAR PLANO MONSTRO** para começar!")
-        st.markdown("### 💀 Eleve seus treinos ao próximo nível com Inteligência Artificial!")
+        st.markdown("<br>", unsafe_allow_html=True)
+        btn_gerar = st.button("GERAR PROTOCOLO DE ALTA PERFORMANCE", use_container_width=True)
 
-with tab_salvos:
-    st.header("📁 Protocolos Salvos")
-    treinos_salvos = carregar_treinos_salvos()
-    
-    if not treinos_salvos:
-        st.info("Nenhum protocolo salvo no momento. Gere um treino na aba ao lado e salve-o!")
-    else:
-        for nome_plano, dados_plano in treinos_salvos.items():
-            with st.expander(f"📌 {nome_plano} (Criado em: {dados_plano.get('data', 'Data desconhecida')})"):
-                usr = dados_plano['user_data']
-                st.markdown(f"**Meta:** {usr['meta']} | **Foco:** {usr.get('foco_treino', 'Padrão')} | **Dias:** {usr['dias_treino']} | **Nível:** {usr['experiencia']}")
-                st.write("---")
-                
-                cm1, cm2, cm3, cm4 = st.columns(4)
-                cm1.metric("Calorias", f"{dados_plano['macros']['calorias']} kcal")
-                cm2.metric("Proteínas", f"{dados_plano['macros']['proteinas']} g")
-                cm3.metric("Carboidratos", f"{dados_plano['macros']['carboidratos']} g")
-                cm4.metric("Gorduras", f"{dados_plano['macros']['gorduras']} g")
-                
-                st.write("---")
-                st.markdown("**🏋️‍♂️ Detalhes do Treino Semanal:**")
-                for dia, exercicios in dados_plano['treino'].items():
-                    if exercicios:
-                        foco_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios.keys()))
-                        st.markdown(f"**{dia}** ({foco_str})")
-                        for grupo_chave_ex, exercicio_desc in exercicios.items():
-                            nome_exercicio = exercicio_desc.split(" (")[0]
-                            query = urllib.parse.quote(f"como executar {nome_exercicio} musculação")
-                            yt_link = f"https://www.youtube.com/results?search_query={query}"
+    if btn_gerar:
+        with st.spinner('Forjando o protocolo no fogo...'):
+            user_data = {
+                "nome": nome, "idade": idade, "altura": altura, "peso": peso, 
+                "genero": genero, "experiencia": experiencia, "meta": meta, 
+                "foco_treino": foco_treino, "dias_treino": dias_treino, 
+                "dieta_selecionada": dieta
+            }
+            
+            # Cálculos
+            macros = calcular_macros(peso, altura, idade, genero, meta, experiencia, atividade, dieta)
+            treino, nome_split = gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_split)
+            dieta_plano = gerar_dieta_completa(macros, dieta, meta)
+            
+            # Guardando na Sessão para transitar entre as abas
+            st.session_state['treino_atual'] = treino
+            st.session_state['dieta_atual'] = dieta_plano
+            st.session_state['macros_atual'] = macros
+            st.session_state['user_data'] = user_data
+            st.session_state['nome_split'] = nome_split
+            
+            # Salvamento automático no histórico
+            treinos_existentes = carregar_treinos_salvos()
+            id_treino = f"Treino_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            treinos_existentes[id_treino] = {
+                "data": datetime.now().strftime('%d/%m/%Y %H:%M'),
+                "split": nome_split,
+                "meta": meta,
+                "treino": treino
+            }
+            salvar_treinos_arquivo(treinos_existentes)
+            
+            st.success("🔥 Protocolo gerado com sucesso! Vá para a aba 'Seu Plano' para visualizar.")
+
+    # ABA: SEU PLANO (Exibição dos Resultados)
+    with tab_plano:
+        if 'treino_atual' in st.session_state:
+            macros = st.session_state['macros_atual']
+            
+            st.markdown("### 📊 Macros Diários Alvo")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("🔥 Calorias", f"{macros['calorias']} kcal")
+            c2.metric("🥩 Proteínas", f"{macros['proteinas']}g")
+            c3.metric("🍚 Carboidratos", f"{macros['carboidratos']}g")
+            c4.metric("🥑 Gorduras", f"{macros['gorduras']}g")
+            
+            st.markdown("---")
+            col_treino, col_dieta = st.columns([1.2, 1])
+            
+            with col_treino:
+                st.markdown(f"### 🏋️ Rotina: {st.session_state['nome_split']}")
+                for dia, exercicios in st.session_state['treino_atual'].items():
+                    with st.expander(f"💪 {dia}", expanded=True):
+                        if not exercicios:
+                            st.write("Descanso / Recovery")
+                        for chave, ex in exercicios.items():
+                            grupo = chave.split(" - ")[0]
+                            st.markdown(f"- **{grupo}:** {ex}")
+            
+            with col_dieta:
+                st.markdown("### 🍽️ Refeições Sugeridas")
+                for ref, itens in st.session_state['dieta_atual'].items():
+                    with st.expander(f"🍴 {ref}", expanded=False):
+                        for item in itens:
+                            st.markdown(f"- {item}")
                             
-                            st.markdown(f"- **{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:** {exercicio_desc} | [🎥 Ver Vídeo]({yt_link})")
-                        st.write("")
-                    else:
-                        st.markdown(f"**{dia}**: Descanso / OFF")
-                        st.write("")
-                
-                # Plano Alimentar integrado como um segundo plano salvo
-                st.write("---")
-                st.markdown("**🥗 Plano Alimentar (Dieta) Salvo:**")
-                for refeicao, itens_refeicao in dados_plano.get('dieta', {}).items():
-                    with st.expander(f"🍽️ {refeicao.upper()}"):
-                        if not itens_refeicao or "Refeição opcional" in itens_refeicao[0]:
-                            st.write("Nenhuma sugestão específica ou refeição opcional.")
-                        else:
-                            for item_desc in itens_refeicao:
-                                st.markdown(f" • {item_desc}")
-                
-                st.write("---")
-                if st.button(f"🗑️ Excluir '{nome_plano}'", key=f"del_{nome_plano}"):
-                    del treinos_salvos[nome_plano]
-                    salvar_treinos_arquivo(treinos_salvos)
-                    st.rerun()
+            st.markdown("---")
+            
+            # Geração do PDF para Download
+            pdf_buffer = gerar_pdf(
+                st.session_state['treino_atual'], 
+                st.session_state['dieta_atual'], 
+                st.session_state['macros_atual'], 
+                st.session_state['user_data']
+            )
+            
+            st.download_button(
+                label="📥 DOWNLOAD PLANO COMPLETO (PDF)",
+                data=pdf_buffer,
+                file_name=f"Plano_Monstro_{st.session_state['user_data'].get('nome', 'Atleta')}.pdf",
+                mime="application/pdf",
+                use_container_width=True
+            )
+        else:
+            st.info("Configure e gere seu protocolo na aba 'Configurar Protocolo' primeiro.")
+
+    # ABA: HISTÓRICO
+    with tab_hist:
+        treinos_salvos = carregar_treinos_salvos()
+        if not treinos_salvos:
+            st.write("Nenhum treino no arsenal ainda.")
+        else:
+            st.markdown("### 📁 Arsenal de Treinos")
+            for t_id, dados in reversed(list(treinos_salvos.items())):
+                with st.expander(f"🗓️ {dados['data']} - {dados.get('split', 'Treino')} ({dados.get('meta', '')})"):
+                    st.json(dados['treino'])
+
+if __name__ == "__main__":
+    main()
