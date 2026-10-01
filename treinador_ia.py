@@ -310,6 +310,20 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
                 grupos_por_dia[d] = ["Peito", "Costas", "Ombros", "Bíceps", "Tríceps"]
             else:
                 grupos_por_dia[d] = ["Costas", "Peito", "Ombros", "Tríceps", "Bíceps"]
+    elif foco_treino == "Híbrido (Full Body + Ênfase)":
+        split_escolhido = f"Híbrido ({dias_treino} dias: Full Body + Ênfase Pernas)"
+        grupos_por_dia = {}
+        for d in range(1, dias_treino + 1):
+            # Se tiver 5 dias ou mais, os primeiros dias são Full Body e os últimos são de ênfase (ex: Pernas)
+            if dias_treino >= 5 and d == dias_treino:
+                grupos_por_dia[d] = ["Pernas", "Abdômen"]
+            elif dias_treino >= 6 and d == dias_treino - 1:
+                grupos_por_dia[d] = ["Ombros", "Bíceps", "Tríceps"]
+            else:
+                if d % 2 != 0:
+                    grupos_por_dia[d] = ["Peito", "Costas", "Pernas", "Ombros"]
+                else:
+                    grupos_por_dia[d] = ["Costas", "Peito", "Pernas", "Bíceps"]
     else:
         if dias_treino == 1:
             split_escolhido = "Full Body A"
@@ -586,7 +600,12 @@ with st.sidebar:
     
     foco_treino = st.selectbox(
         "🎯 Foco do Treino:", 
-        ["Padrão (Equilibrado)", "Full Body Superior (Apenas Superiores)", "Personalizado (Montar meu próprio)"], 
+        [
+            "Padrão (Equilibrado)", 
+            "Full Body Superior (Apenas Superiores)", 
+            "Híbrido (Full Body + Ênfase)", 
+            "Personalizado (Montar meu próprio)"
+        ], 
         index=0
     )
     
@@ -708,7 +727,7 @@ with tab_gerador:
         st.subheader("💾 Salvar Ficha no Aplicativo")
         col_nome, col_btn = st.columns([3, 1])
         with col_nome:
-            nome_plano_input = st.text_input("Nome da Ficha (ex: Push Pull Legs - Fase 1):", key="nome_plano_input")
+            nome_plano_input = st.text_input("Nome da Ficha (ex: Híbrido 4D Full + 1D Pernas):", key="nome_plano_input")
         with col_btn:
             st.write("") 
             st.write("")
@@ -768,7 +787,6 @@ with tab_salvos:
                         st.markdown(f"**{dia}**: Descanso / OFF")
                         st.write("")
                 
-                # Plano Alimentar integrado como um segundo plano salvo
                 st.write("---")
                 st.markdown("**🥗 Plano Alimentar (Dieta) Salvo:**")
                 for refeicao, itens_refeicao in dados_plano.get('dieta', {}).items():
