@@ -211,7 +211,7 @@ def calcular_macros(peso, altura, idade, genero, meta, experiencia, atividade, d
     }
 
 @st.cache_data
-def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_split=None):
+def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_split=None, custom_exercises=None):
     treino = {}
     
     if foco_treino == "Personalizado (Montar meu próprio)":
@@ -226,7 +226,6 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
             else:
                 grupos_por_dia[d] = ["Costas", "Peito", "Ombros", "Tríceps", "Bíceps"]
     else:
-        # Lógica padrão (Equilibrada)
         if dias_treino == 1:
             split_escolhido = "Full Body A"
             grupos_por_dia = {1: ["Peito", "Costas", "Pernas", "Ombros"]}
@@ -262,39 +261,56 @@ def gerar_treino_completo(dias_treino, experiencia, meta, foco_treino, custom_sp
     for dia_num in range(1, dias_treino + 1):
         nome_dia = f"Dia {dia_num}"
         treino[nome_dia] = {}
+        
+        # Resgata grupos musculares do dia
         grupos_do_dia_atuais = grupos_por_dia.get(dia_num, [])
-        # Caso custom_split use chaves de strings numéricas devido ao JSON, garantimos o get correto
-        if not grupos_do_dia_atuais and str(dia_num) in grupos_por_dia:
-            grupos_do_dia_atuais = grupos_por_dia[str(dia_num)]
+        if not grupos_do_dia_atuais and custom_split and str(dia_num) in custom_split:
+            grupos_do_dia_atuais = custom_split[str(dia_num)]
 
         grupos_do_dia_normalizados = [g.split(" (")[0].strip() for g in grupos_do_dia_atuais]
+        
+        # Resgata exercícios preenchidos manualmente pelo usuário
+        ex_manuais_dia = custom_exercises.get(dia_num, []) if custom_exercises else []
+        if not ex_manuais_dia and custom_exercises and str(dia_num) in custom_exercises:
+            ex_manuais_dia = custom_exercises[str(dia_num)]
+            
+        ex_manuais_por_grupo = {}
+        for grupo, ex in ex_manuais_dia:
+            if grupo not in ex_manuais_por_grupo:
+                ex_manuais_por_grupo[grupo] = []
+            ex_manuais_por_grupo[grupo].append(ex)
 
         for i_grupo, grupo_muscular_original in enumerate(grupos_do_dia_atuais):
             grupo_muscular_normalizado = grupos_do_dia_normalizados[i_grupo]
             if grupo_muscular_normalizado not in EXERCICIOS:
                 continue
 
-            exercicios_disponiveis = EXERCICIOS[grupo_muscular_normalizado].get(experiencia, EXERCICIOS[grupo_muscular_normalizado]["Básico"])
-            if not exercicios_disponiveis:
-                continue
+            # Se o usuário escolheu exercícios exatos, usa eles!
+            if foco_treino == "Personalizado (Montar meu próprio)" and grupo_muscular_normalizado in ex_manuais_por_grupo:
+                exercicios_selecionados = ex_manuais_por_grupo[grupo_muscular_normalizado]
+            else:
+                # Senão, a IA escolhe aleatoriamente com base na experiência
+                exercicios_disponiveis = EXERCICIOS[grupo_muscular_normalizado].get(experiencia, EXERCICIOS[grupo_muscular_normalizado]["Básico"])
+                if not exercicios_disponiveis:
+                    continue
 
-            num_exercicios = 2
-            if len(grupos_do_dia_normalizados) == 1:
-                num_exercicios = random.randint(3, 4) if experiencia != "Avançado" else random.randint(4, 5)
-            elif len(grupos_do_dia_normalizados) == 2:
-                num_exercicios = random.randint(2, 3) if experiencia != "Avançado" else 3
-            elif len(grupos_do_dia_normalizados) >= 3:
-                # Regra serve tanto para Full Body Padrão quanto Full Body Superior (vários grupos)
-                if grupo_muscular_normalizado in ["Peito", "Costas", "Pernas"]:
-                    num_exercicios = random.randint(1, 2)
-                else:
-                    num_exercicios = 1
+                num_exercicios = 2
+                if len(grupos_do_dia_normalizados) == 1:
+                    num_exercicios = random.randint(3, 4) if experiencia != "Avançado" else random.randint(4, 5)
+                elif len(grupos_do_dia_normalizados) == 2:
+                    num_exercicios = random.randint(2, 3) if experiencia != "Avançado" else 3
+                elif len(grupos_do_dia_normalizados) >= 3:
+                    if grupo_muscular_normalizado in ["Peito", "Costas", "Pernas"]:
+                        num_exercicios = random.randint(1, 2)
+                    else:
+                        num_exercicios = 1
 
-            exercicios_selecionados = random.sample(
-                exercicios_disponiveis,
-                min(num_exercicios, len(exercicios_disponiveis)),
-            )
+                exercicios_selecionados = random.sample(
+                    exercicios_disponiveis,
+                    min(num_exercicios, len(exercicios_disponiveis)),
+                )
 
+            # Adiciona os exercícios ao dicionário do treino final
             for i_ex, exercicio in enumerate(exercicios_selecionados):
                 chave_exercicio = f"{grupo_muscular_original} - Ex. {i_ex+1}"
                 count_temp = 1
@@ -478,52 +494,78 @@ if "dieta_plano" not in st.session_state:
 # --- INTERFACE DO USUÁRIO ---
 st.title("💪 Treinador IA de Bodybuilding")
 
+# Painel Lateral dinâmico
 with st.sidebar:
     st.header("📋 Seus Dados")
-    with st.form("user_data_form"):
-        nome = st.text_input("Nome (opcional):", placeholder="Ex: João Silva")
-        genero = st.radio("Gênero:", ["Masculino", "Feminino"], index=0, horizontal=True)
-        peso = st.number_input("Peso (kg):", min_value=30.0, max_value=250.0, value=70.0, step=0.5)
-        altura = st.number_input("Altura (cm):", min_value=100.0, max_value=250.0, value=175.0, step=0.5)
-        idade = st.number_input("Idade:", min_value=14, max_value=99, value=25, step=1)
-        meta = st.selectbox("🎯 Meta Principal:", META_OPCOES, index=0)
-        experiencia = st.selectbox("🏋️ Nível de Experiência em Treino:", EXPERIENCIA_OPCOES, index=1)
+    
+    nome = st.text_input("Nome (opcional):", placeholder="Ex: João Silva")
+    genero = st.radio("Gênero:", ["Masculino", "Feminino"], index=0, horizontal=True)
+    peso = st.number_input("Peso (kg):", min_value=30.0, max_value=250.0, value=70.0, step=0.5)
+    altura = st.number_input("Altura (cm):", min_value=100.0, max_value=250.0, value=175.0, step=0.5)
+    idade = st.number_input("Idade:", min_value=14, max_value=99, value=25, step=1)
+    
+    st.write("---")
+    meta = st.selectbox("🎯 Meta Principal:", META_OPCOES, index=0)
+    experiencia = st.selectbox("🏋️ Nível de Experiência em Treino:", EXPERIENCIA_OPCOES, index=1)
+    
+    foco_treino = st.selectbox(
+        "🎯 Foco do Treino:", 
+        ["Padrão (Equilibrado)", "Full Body Superior (Apenas Superiores)", "Personalizado (Montar meu próprio)"], 
+        index=0
+    )
+    
+    dias_treino = st.slider("📅 Dias de treino por semana:", 1, 7, 4)
+    
+    # Seção Dinâmica de Treino Personalizado
+    custom_split = {}
+    custom_exercises = {}
+    
+    if foco_treino == "Personalizado (Montar meu próprio)":
+        st.markdown("#### 🛠️ Monte seu Microciclo:")
+        opcoes_musculos = ["Peito", "Costas", "Pernas", "Ombros", "Tríceps", "Bíceps", "Abdômen"]
         
-        # Opção Customizada adicionada no selectbox
-        foco_treino = st.selectbox(
-            "🎯 Foco do Treino:", 
-            ["Padrão (Equilibrado)", "Full Body Superior (Apenas Superiores)", "Personalizado (Montar meu próprio)"], 
-            index=0
-        )
-        
-        dias_treino = st.slider("📅 Dias de treino por semana:", 1, 7, 4)
-        
-        # Área dinâmica para montar o próprio treino se o Personalizado for selecionado
-        custom_split = {}
-        if foco_treino == "Personalizado (Montar meu próprio)":
-            st.markdown("#### 🛠️ Configure os grupos de cada dia:")
-            opcoes_musculos = ["Peito", "Costas", "Pernas", "Ombros", "Tríceps", "Bíceps", "Abdômen"]
-            for d in range(1, dias_treino + 1):
-                custom_split[d] = st.multiselect(f"Dia {d}:", opcoes_musculos, key=f"custom_day_{d}")
+        for d in range(1, dias_treino + 1):
+            with st.expander(f"📅 Configurar Dia {d}", expanded=False):
+                musculos_dia = st.multiselect(f"Músculos (Dia {d}):", opcoes_musculos, key=f"custom_day_{d}")
+                custom_split[d] = musculos_dia
                 
-        atividade = st.selectbox("🚶 Nível de Atividade Diária (sem contar treinos):", list(NIVEIS_ATIVIDADE_MULTIPLICADORES.keys()), index=2)
-        dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
-        
-        submitted = st.form_submit_button("🚀 Gerar Plano Completo Agora!")
+                exercicios_do_dia = []
+                if musculos_dia:
+                    st.caption("Escolha os exercícios (ou deixe em branco para a IA gerar).")
+                    for m in musculos_dia:
+                        # Extrai todos os exercícios disponíveis no banco para esse músculo
+                        todos_ex = EXERCICIOS[m]["Básico"] + EXERCICIOS[m]["Intermediário"] + EXERCICIOS[m]["Avançado"]
+                        # Remove as duplicatas mantendo a ordem
+                        todos_ex = list(dict.fromkeys(todos_ex)) 
+                        
+                        escolhidos = st.multiselect(f"Exercícios de {m}:", todos_ex, key=f"custom_ex_{d}_{m}")
+                        if escolhidos:
+                            exercicios_do_dia.extend([(m, ex) for ex in escolhidos])
+                
+                custom_exercises[d] = exercicios_do_dia
 
-    if submitted:
-        with st.spinner("🧠 Analisando seus dados e montando o plano perfeito... Aguarde!"):
-            st.session_state.user_data_dict = {
-                "nome": nome if nome else "Usuário(a)",
-                "genero": genero, "peso": float(peso), "altura": float(altura), "idade": int(idade),
-                "meta": meta, "experiencia": experiencia, "foco_treino": foco_treino, 
-                "custom_split": custom_split, "atividade": atividade, 
-                "dias_treino": int(dias_treino), "dieta_selecionada": dieta_selecionada_usuario,
-            }
-            st.session_state.macros = calcular_macros(float(peso), float(altura), int(idade), genero, meta, experiencia, atividade, dieta_selecionada_usuario)
-            st.session_state.treino, st.session_state.split_info = gerar_treino_completo(int(dias_treino), experiencia, meta, foco_treino, custom_split)
-            st.session_state.dieta_plano = gerar_dieta_completa(st.session_state.macros, dieta_selecionada_usuario, st.session_state.user_data_dict)
-            st.session_state.plano_gerado = True
+    st.write("---")
+    atividade = st.selectbox("🚶 Nível de Atividade Diária (sem contar treinos):", list(NIVEIS_ATIVIDADE_MULTIPLICADORES.keys()), index=2)
+    dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
+    
+    st.write("---")
+    # Botão de Envio
+    submitted = st.button("🚀 Gerar Plano Completo Agora!", use_container_width=True)
+
+# Lógica de processamento e geração atrelada ao clique do botão
+if submitted:
+    with st.spinner("🧠 Analisando seus dados e montando o plano perfeito... Aguarde!"):
+        st.session_state.user_data_dict = {
+            "nome": nome if nome else "Usuário(a)",
+            "genero": genero, "peso": float(peso), "altura": float(altura), "idade": int(idade),
+            "meta": meta, "experiencia": experiencia, "foco_treino": foco_treino, 
+            "custom_split": custom_split, "custom_exercises": custom_exercises,
+            "atividade": atividade, "dias_treino": int(dias_treino), "dieta_selecionada": dieta_selecionada_usuario,
+        }
+        st.session_state.macros = calcular_macros(float(peso), float(altura), int(idade), genero, meta, experiencia, atividade, dieta_selecionada_usuario)
+        st.session_state.treino, st.session_state.split_info = gerar_treino_completo(int(dias_treino), experiencia, meta, foco_treino, custom_split, custom_exercises)
+        st.session_state.dieta_plano = gerar_dieta_completa(st.session_state.macros, dieta_selecionada_usuario, st.session_state.user_data_dict)
+        st.session_state.plano_gerado = True
 
 
 # --- ESTRUTURA DE ABAS PRINCIPAIS ---
