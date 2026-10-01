@@ -13,11 +13,110 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Table, TableStyle
 
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(
-    page_title="Treinador IA de Bodybuilding",
-    page_icon="💪",
+    page_title="Treinador IA - Modo Caveira",
+    page_icon="💀",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# --- ESTILIZAÇÃO CSS CUSTOMIZADA (TEMA HARDCORE / MONSTRO) ---
+st.markdown("""
+    <style>
+    /* Fundo Geral da Aplicação */
+    .stApp {
+        background-color: #0c0c0c;
+        color: #e0e0e0;
+    }
+    
+    /* Barra Lateral Estilizada */
+    [data-testid="stSidebar"] {
+        background-color: #141414;
+        border-right: 1px solid #222222;
+    }
+    
+    /* Botões Principais (Estilo Agressivo) */
+    .stButton>button {
+        background: linear-gradient(135deg, #b70909 0%, #e5383b 100%);
+        color: white;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        border: none;
+        border-radius: 6px;
+        padding: 0.6rem 1rem;
+        box-shadow: 0 4px 10px rgba(183, 9, 9, 0.4);
+        transition: all 0.3s ease;
+    }
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #e5383b 100%, #ff4d4d 0%);
+        box-shadow: 0 0 15px rgba(229, 56, 59, 0.8);
+        transform: translateY(-2px);
+    }
+    
+    /* Botão de Download */
+    [data-testid="stDownloadButton"]>button {
+        background: linear-gradient(135deg, #132a13 0%, #31572c 100%);
+        color: #ffffff;
+        font-weight: 800;
+        border: 1px solid #4f772d;
+        border-radius: 6px;
+    }
+    [data-testid="stDownloadButton"]>button:hover {
+        background: linear-gradient(135deg, #31572c 0%, #4f772d 100%);
+        box-shadow: 0 0 12px rgba(79, 119, 45, 0.6);
+    }
+    
+    /* Cards de Métricas Estilo Monstro */
+    [data-testid="stMetric"] {
+        background-color: #171717;
+        border: 1px solid #282828;
+        border-left: 4px solid #e5383b;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    [data-testid="stMetricLabel"] {
+        color: #999999 !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+    [data-testid="stMetricValue"] {
+        color: #ff4d4d !important;
+        font-weight: 900;
+        font-size: 1.6rem;
+    }
+    
+    /* Abas Customizadas */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+        background-color: #0c0c0c;
+        padding-bottom: 5px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #171717;
+        border: 1px solid #282828;
+        border-radius: 6px 6px 0px 0px;
+        color: #b0b0b0;
+        font-weight: 700;
+        padding: 10px 24px;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #e5383b !important;
+        color: white !important;
+        border-color: #e5383b !important;
+        box-shadow: 0 -2px 10px rgba(229, 56, 59, 0.5);
+    }
+    
+    /* Caixas de Expansão */
+    .streamlit-expanderHeader {
+        background-color: #171717 !important;
+        border: 1px solid #282828;
+        border-radius: 6px;
+        color: #ffffff !important;
+        font-weight: 700;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # --- CONSTANTES E DADOS ---
 META_OPCOES = ["Crescimento", "Emagrecimento", "Manutenção do Peso"]
@@ -35,9 +134,7 @@ NIVEIS_ATIVIDADE_MULTIPLICADORES = {
     "Levemente ativo (caminhadas leves, trabalho com algum movimento)": 1.375,
     "Moderadamente ativo (trabalho físico leve, exercícios 2-3x/sem)": 1.55,
     "Muito ativo (trabalho físico pesado, exercícios 4-5x/sem)": 1.725,
-    "Extremamente ativo (atleta, trabalho físico intenso + treinos diários)": (
-        1.9
-    ),
+    "Extremamente ativo (atleta, trabalho físico intenso + treinos diários)": 1.9,
 }
 
 ARQUIVO_TREINOS = "treinos_salvos.json"
@@ -488,12 +585,12 @@ if "dieta_plano" not in st.session_state:
     st.session_state.dieta_plano = {}
 
 # --- INTERFACE DO USUÁRIO ---
-st.title("💪 Treinador IA de Bodybuilding")
+st.title("💀 Treinador IA — Modo Caveira")
 
 with st.sidebar:
-    st.header("📋 Seus Dados")
+    st.header("📋 Dados do Atleta")
     
-    nome = st.text_input("Nome (opcional):", placeholder="Ex: João Silva")
+    nome = st.text_input("Nome:", placeholder="Ex: Mestre Tephinho")
     genero = st.radio("Gênero:", ["Masculino", "Feminino"], index=0, horizontal=True)
     peso = st.number_input("Peso (kg):", min_value=30.0, max_value=250.0, value=70.0, step=0.5)
     altura = st.number_input("Altura (cm):", min_value=100.0, max_value=250.0, value=175.0, step=0.5)
@@ -501,7 +598,7 @@ with st.sidebar:
     
     st.write("---")
     meta = st.selectbox("🎯 Meta Principal:", META_OPCOES, index=0)
-    experiencia = st.selectbox("🏋️ Nível de Experiência em Treino:", EXPERIENCIA_OPCOES, index=1)
+    experiencia = st.selectbox("🏋️ Nível de Experiência:", EXPERIENCIA_OPCOES, index=1)
     
     foco_treino = st.selectbox(
         "🎯 Foco do Treino:", 
@@ -537,16 +634,16 @@ with st.sidebar:
                 custom_exercises[d] = exercicios_do_dia
 
     st.write("---")
-    atividade = st.selectbox("🚶 Nível de Atividade Diária (sem contar treinos):", list(NIVEIS_ATIVIDADE_MULTIPLICADORES.keys()), index=2)
+    atividade = st.selectbox("🚶 Nível de Atividade Diária:", list(NIVEIS_ATIVIDADE_MULTIPLICADORES.keys()), index=2)
     dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
     
     st.write("---")
-    submitted = st.button("🚀 Gerar Plano Completo Agora!", use_container_width=True)
+    submitted = st.button("🔥 GERAR PLANO MONSTRO", use_container_width=True)
 
 if submitted:
-    with st.spinner("🧠 Analisando seus dados e montando o plano perfeito... Aguarde!"):
+    with st.spinner("💀 Processando protocolos e calculando carga... Aguarde!"):
         st.session_state.user_data_dict = {
-            "nome": nome if nome else "Usuário(a)",
+            "nome": nome if nome else "Atleta",
             "genero": genero, "peso": float(peso), "altura": float(altura), "idade": int(idade),
             "meta": meta, "experiencia": experiencia, "foco_treino": foco_treino, 
             "custom_split": custom_split, "custom_exercises": custom_exercises,
@@ -570,23 +667,23 @@ with tab_gerador:
         split_info = st.session_state.split_info
         dieta_plano = st.session_state.dieta_plano
 
-        st.success(f"✅ Plano Personalizado para **{user_data_dict['nome']}** Gerado com Sucesso!")
+        st.success(f"💀 Protocolo Monstro para **{user_data_dict['nome']}** gerado com sucesso!")
         st.balloons()
 
-        st.subheader("📊 Resumo do Plano")
+        st.subheader("📊 Resumo dos Macros & Alvo")
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("🔥 Calorias Diárias (aprox.)", f"{macros['calorias']} kcal")
-            st.metric("🥩 Proteínas (aprox.)", f"{macros['proteinas']} g")
+            st.metric("🔥 Calorias Diárias", f"{macros['calorias']} kcal")
+            st.metric("🥩 Proteínas", f"{macros['proteinas']} g")
         with col2:
-            st.metric("🍚 Carboidratos (aprox.)", f"{macros['carboidratos']} g")
-            st.metric("🥑 Gorduras (aprox.)", f"{macros['gorduras']} g")
+            st.metric("🍚 Carboidratos", f"{macros['carboidratos']} g")
+            st.metric("🥑 Gorduras", f"{macros['gorduras']} g")
         with col3:
             st.metric("🗓️ Dias de Treino", f"{user_data_dict['dias_treino']} / semana")
-            st.metric("🏆 Nível", user_data_dict['experiencia'])
+            st.metric("🏆 Experiência", user_data_dict['experiencia'])
 
-        st.markdown(f"**🎯 Meta Principal:** {user_data_dict['meta']} | **Foco:** {user_data_dict['foco_treino']} | **🥗 Dieta:** {user_data_dict['dieta_selecionada']}")
-        st.markdown(f"**🏋️‍♂️ Split de Treino:** {split_info} | **🚶 Atividade:** {user_data_dict['atividade']}")
+        st.markdown(f"**🎯 Meta:** {user_data_dict['meta']} | **Foco:** {user_data_dict['foco_treino']} | **🥗 Dieta:** {user_data_dict['dieta_selecionada']}")
+        st.markdown(f"**🏋️‍♂️ Split:** {split_info} | **🚶 Atividade:** {user_data_dict['atividade']}")
 
         tab_treino, tab_dieta, tab_download = st.tabs(["🏋️ Plano de Treino Detalhado", "🍽️ Plano Alimentar Sugerido", "📥 Download do Plano"])
 
@@ -594,9 +691,9 @@ with tab_gerador:
             st.header("📅 Seu Plano de Treino Semanal")
             for dia, exercicios_dia in treino.items():
                 foco_dia_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios_dia.keys())) if exercicios_dia else "Descanso / OFF"
-                with st.expander(f"**{dia.upper()}** - Foco: {foco_dia_str}"):
+                with st.expander(f"**{dia.upper()}** — Foco: {foco_dia_str}"):
                     if not exercicios_dia:
-                        st.write("Dia de descanso ou sem exercícios definidos.")
+                        st.write("Dia de descanso ou recuperação.")
                     else:
                         for grupo_chave_ex, exercicio_desc in exercicios_dia.items():
                             nome_exercicio = exercicio_desc.split(" (")[0]
@@ -606,7 +703,7 @@ with tab_gerador:
                             st.markdown(f"💪 **{grupo_chave_ex.replace(' - Ex. ', ' Exercício ')}:** {exercicio_desc} | [🎥 Ver Vídeo no YouTube]({yt_link})")
         
         with tab_dieta:
-            st.header("🥗 Seu Plano Alimentar Diário")
+            st.header("🥗 Plano Alimentar e Suplementação")
             for refeicao, itens_refeicao in dieta_plano.items():
                 with st.expander(f"**{refeicao.upper()}**"):
                     if not itens_refeicao or "Refeição opcional" in itens_refeicao[0]:
@@ -616,27 +713,27 @@ with tab_gerador:
                             st.markdown(f" • {item_desc}")
         
         with tab_download:
-            st.header("📥 Baixar Seu Plano em PDF")
+            st.header("📥 Baixar Ficha em PDF")
             pdf_bytes = gerar_pdf(treino, dieta_plano, macros, user_data_dict)
             st.download_button(
-                label="⬇️ Baixar Plano em PDF",
+                label="⬇️ Baixar Protocolo em PDF",
                 data=pdf_bytes,
-                file_name=f"plano_ia_{user_data_dict['nome'].replace(' ', '_').lower()}.pdf",
+                file_name=f"protocolo_monstro_{user_data_dict['nome'].replace(' ', '_').lower()}.pdf",
                 mime="application/pdf",
                 key="download_pdf_button"
             )
 
         st.markdown("---")
-        st.subheader("💾 Salvar este Plano no Aplicativo")
+        st.subheader("💾 Salvar Ficha no Aplicativo")
         col_nome, col_btn = st.columns([3, 1])
         with col_nome:
-            nome_plano_input = st.text_input("Dê um nome para este plano (ex: Ficha Força Avançado):", key="nome_plano_input")
+            nome_plano_input = st.text_input("Nome da Ficha (ex: Push Pull Legs - Fase 1):", key="nome_plano_input")
         with col_btn:
             st.write("") 
             st.write("")
-            if st.button("💾 Salvar Plano Agora"):
+            if st.button("💾 Salvar Protocolo"):
                 if nome_plano_input.strip() == "":
-                    st.warning("Por favor, digite um nome para o plano antes de salvar.")
+                    st.warning("Insira um nome para o plano antes de salvar.")
                 else:
                     treinos_bd = carregar_treinos_salvos()
                     treinos_bd[nome_plano_input] = {
@@ -648,19 +745,19 @@ with tab_gerador:
                         "dieta": st.session_state.dieta_plano
                     }
                     salvar_treinos_arquivo(treinos_bd)
-                    st.success(f"Plano '{nome_plano_input}' salvo com sucesso! Verifique a aba 'Meus Planos Salvos'.")
+                    st.success(f"Protocolo '{nome_plano_input}' salvo com sucesso!")
 
     else:
-        st.info("👈 Preencha seus dados na barra lateral e clique em 'Gerar Plano Completo Agora!' para começar sua jornada!")
-        st.markdown("### Transforme seu físico com o poder da Inteligência Artificial! 🚀")
+        st.info("👈 Preencha seus dados na barra lateral e clique em **GERAR PLANO MONSTRO** para começar!")
+        st.markdown("### 💀 Eleve seus treinos ao próximo nível com Inteligência Artificial!")
 
 # ABA 2: OS TREINOS SALVOS LOCALMENTE
 with tab_salvos:
-    st.header("📁 Meus Planos Salvos")
+    st.header("📁 Protocolos Salvos")
     treinos_salvos = carregar_treinos_salvos()
     
     if not treinos_salvos:
-        st.info("Você ainda não salvou nenhum plano no aplicativo. Gere um treino na aba ao lado e salve-o para que ele apareça aqui!")
+        st.info("Nenhum protocolo salvo no momento. Gere um treino na aba ao lado e salve-o!")
     else:
         for nome_plano, dados_plano in treinos_salvos.items():
             with st.expander(f"📌 {nome_plano} (Criado em: {dados_plano.get('data', 'Data desconhecida')})"):
@@ -675,7 +772,7 @@ with tab_salvos:
                 cm4.metric("Gorduras", f"{dados_plano['macros']['gorduras']} g")
                 
                 st.write("---")
-                st.markdown("**Detalhes do Treino Semanal:**")
+                st.markdown("**Detalhes da Ficha Salva:**")
                 for dia, exercicios in dados_plano['treino'].items():
                     if exercicios:
                         foco_str = ", ".join(set(ex.split(" - ")[0] for ex in exercicios.keys()))
