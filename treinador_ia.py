@@ -19,7 +19,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- ESTILIZAÇÃO CSS CUSTOMIZADA (TEMA HARDCORE / MONSTRO) ---
+# --- ESTILIZAÇÃO CSS CUSTOMIZADA (TEMA HARDCORE /Caveira) ---
 st.markdown("""
     <style>
     /* Fundo Geral da Aplicação */
@@ -65,7 +65,7 @@ st.markdown("""
         box-shadow: 0 0 12px rgba(79, 119, 45, 0.6);
     }
     
-    /* Cards de Métricas Estilo Monstro */
+    /* Cards de Métricas EstiloCaveira */
     [data-testid="stMetric"] {
         background-color: #171717;
         border: 1px solid #282828;
@@ -638,7 +638,7 @@ with st.sidebar:
     dieta_selecionada_usuario = st.selectbox("🥗 Tipo de Dieta Preferencial:", DIETA_OPCOES, index=0, key="dieta_tipo_selectbox")
     
     st.write("---")
-    submitted = st.button("🔥 GERAR PLANO MONSTRO", use_container_width=True)
+    submitted = st.button("🔥 GERAR PLANOCaveira", use_container_width=True)
 
 if submitted:
     with st.spinner("💀 Processando protocolos e calculando carga... Aguarde!"):
@@ -667,7 +667,7 @@ with tab_gerador:
         split_info = st.session_state.split_info
         dieta_plano = st.session_state.dieta_plano
 
-        st.success(f"💀 Protocolo Monstro para **{user_data_dict['nome']}** gerado com sucesso!")
+        st.success(f"💀 ProtocoloCaveira para **{user_data_dict['nome']}** gerado com sucesso!")
         st.balloons()
 
         st.subheader("📊 Resumo dos Macros & Alvo")
@@ -748,7 +748,7 @@ with tab_gerador:
                     st.success(f"Protocolo '{nome_plano_input}' salvo com sucesso!")
 
     else:
-        st.info("👈 Preencha seus dados na barra lateral e clique em **GERAR PLANO MONSTRO** para começar!")
+        st.info("👈 Preencha seus dados na barra lateral e clique em **GERAR PLANOCaveira** para começar!")
         st.markdown("### 💀 Eleve seus treinos ao próximo nível com Inteligência Artificial!")
 
 # ABA 2: OS TREINOS SALVOS LOCALMENTE
